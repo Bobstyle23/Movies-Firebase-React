@@ -53,7 +53,7 @@ function App() {
       setError(error.message);
     }
     setIsLoading(false);
-  }, [setMovies]);
+  }, [setIsLoading, setMovies]);
 
   useEffect(() => {
     fetchMoviesHandler();
