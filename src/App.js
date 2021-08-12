@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import MovieList from "./components/MovieList";
 import AddMovie from "./components/AddMovie";
-
+import useMovies from "./hooks/useMovies";
+import useLoading from "./hooks/useLoading";
 import "./App.css";
 
 function App() {
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [movies, setMovies] = useMovies([]);
+  const [isLoading, setIsLoading] = useLoading(false);
   const [error, setError] = useState(null);
 
   const fetchMoviesHandler = useCallback(async () => {
@@ -17,7 +18,9 @@ function App() {
       //https://react-movies-b9a00-default-rtdb.firebaseio.com/movies.json
       //https://react-movies-b9a00-default-rtdb.firebaseio.com/movies.json
 
-      const response = await fetch("");
+      const response = await fetch(
+        "https://react-movies-b9a00-default-rtdb.firebaseio.com/movies.json"
+      );
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
@@ -50,20 +53,23 @@ function App() {
       setError(error.message);
     }
     setIsLoading(false);
-  }, []);
+  }, [setMovies]);
 
   useEffect(() => {
     fetchMoviesHandler();
   }, [fetchMoviesHandler]);
 
   async function addMovie(movie) {
-    const response = await fetch("", {
-      method: "POST",
-      body: JSON.stringify(movie),
-      headers: {
-        "Content-Type": "application.json",
-      },
-    });
+    const response = await fetch(
+      "https://react-movies-b9a00-default-rtdb.firebaseio.com/movies.json",
+      {
+        method: "POST",
+        body: JSON.stringify(movie),
+        headers: {
+          "Content-Type": "application.json",
+        },
+      }
+    );
     const data = await response.json();
     console.log(data);
   }
